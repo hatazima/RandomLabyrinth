@@ -59,7 +59,7 @@ public class EnemyOrb : MonoBehaviour
         }
         else if(transform.position == nextRoomPosition && currentState == EnemyState.move)
         {
-            //wc.roomArray[currentPosition.y, currentPosition.x] = MapType.enemyRoom;
+            wc.SetMapType(currentPosition, MapType.room);
             currentPosition = nextRoom;
             ChangeState(EnemyState.idle);
         }
@@ -73,7 +73,7 @@ public class EnemyOrb : MonoBehaviour
 
                 break;
             case EnemyState.move:
-                //EnemyMove();
+                EnemyMove();
                 break;
 
         }
@@ -115,7 +115,7 @@ public class EnemyOrb : MonoBehaviour
         rooms = wc.GetMovableRoom(currentPosition);
         if(rooms.Count <= 0) return currentPosition;
         nextRoom = rooms[rand.Next(rooms.Count)];
-        //wc.roomArray[nextRoom.y, nextRoom.x] = MapType.enemyRoom;
+        wc.SetMapType(nextRoom, MapType.enemyRoom);
         return nextRoom;
     }
 
