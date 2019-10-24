@@ -8,7 +8,7 @@ public class Boss : MonoBehaviour
     System.Random rand = new System.Random(Environment.TickCount);
     public GameObject player;      //プレイヤーの位置を知るための変数
     Animator animator;             //ボスのアニメーション
-    int hp = 70;                   //ボスのHP
+    int hp = 100;                   //ボスのHP
     public GameObject beam;        //攻撃パターン１ 口から玉を吐く
     public GameObject needle;      //攻撃パターン２ とげを召喚する
     public GameObject sword;       //攻撃パターン３ 剣？を召喚する
@@ -18,9 +18,22 @@ public class Boss : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerAttack"))
+        if (other.gameObject.CompareTag("PlayerBullet"))
         {
             hp--;
+            GetComponent<ParticleSystem>().Play();
+            if (hp == 0)
+            {
+                //BGMフェードアウト
+                AudioManager.Instance.FadeOutBGM();
+                //BGM再生
+                AudioManager.Instance.PlayBGM("Clear");
+                Destroy(gameObject);
+            }
+        }
+        if (other.gameObject.CompareTag("PlayerSword"))
+        {
+            hp -= 2;
             GetComponent<ParticleSystem>().Play();
             if (hp == 0)
             {

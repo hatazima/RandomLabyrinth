@@ -21,15 +21,29 @@ public class EnemyOrb : MonoBehaviour
     Vector3 nextRoomPosition;
     Vector2Int nextRoom;
     float time = 0, goTiem = 2;
+    int hp = 4;
     EnemyState currentState = 0;
     Action<EnemyState> changeEvent;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerAttack"))
+        if (other.gameObject.CompareTag("PlayerBullet"))
         {
-            player.GetComponent<PlayerAttack>().BreakCountPlus();
-            Destroy(gameObject);
+            hp--;
+            if (hp == 0)
+            {
+                player.GetComponent<PlayerAttack>().BreakCountPlus();
+                Destroy(gameObject);
+            }
+        }
+        if (other.gameObject.CompareTag("PlayerSword"))
+        {
+            hp -= 2;
+            if (hp == 0)
+            {
+                player.GetComponent<PlayerAttack>().BreakCountPlus();
+                Destroy(gameObject);
+            }
         }
     }
 

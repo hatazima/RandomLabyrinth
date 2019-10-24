@@ -10,6 +10,8 @@ TagManager:
   - PlayerAttack
   - HpPlus
   - PortionPlus
+  - PlayerBullet
+  - PlayerSword
   layers:
   - Default
   - TransparentFX

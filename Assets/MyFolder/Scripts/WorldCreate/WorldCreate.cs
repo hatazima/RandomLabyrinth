@@ -36,7 +36,7 @@ public class WorldCreate : MonoBehaviour
         enemyCount = SelectStage.enemyCreateCount;
         if (SelectStage.type == 6) materialType = rand.Next(0, 6);
         else materialType = SelectStage.type;
-        //AudioManager.Instance.PlayBGM("Main1");
+        AudioManager.Instance.PlayBGM("Main1");
         /* ×外×外×外×
          * 外へ壁へ壁へ外
          * ×壁×壁×壁×
@@ -110,7 +110,7 @@ public class WorldCreate : MonoBehaviour
             spawnEnemy.currentPosition = room;
             spawnEnemy.wc = this;
             enemyes.Add(spawnEnemy);
-            roomArray[room.y, room.x] = MapType.enemyRoom;
+            roomArray[room.x, room.y] = MapType.enemyRoom;
         }
 
         for(int i = 0; i < others.Length; i++)
@@ -191,8 +191,8 @@ public class WorldCreate : MonoBehaviour
         {
             Vector2Int candidatePos = currentPosition + diff * 2;
             Vector2Int tempPos = currentPosition + diff;
-            if (roomArray[tempPos.y, tempPos.x] == MapType.empty && 
-                roomArray[candidatePos.y, candidatePos.x] == MapType.room)
+            if (roomArray[tempPos.x, tempPos.y] == MapType.empty && 
+                roomArray[candidatePos.x, candidatePos.y] == MapType.room)
             {
                 movableRoomList.Add(candidatePos);
             }

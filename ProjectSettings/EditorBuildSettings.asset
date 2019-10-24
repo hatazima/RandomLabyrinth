@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/MyFolder/Scenes/Boss6.unity
     guid: 8b72e3b9b9533d146a2978e46fb786c9
   - enabled: 1
+    path: Assets/MyFolder/Scenes/GameOver.unity
+    guid: fa7091a38c40e524cb59760de1b2a60d
+  - enabled: 1
     path: Assets/MyFolder/Scenes/Clear.unity
     guid: 37f8a285e5274ac45bfea565941ae2d9
   m_configObjects: {}

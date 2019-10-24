@@ -21,6 +21,11 @@ public class PlayerHp : MonoBehaviour
             hp -= 10;
             Text text2 = hpObject.GetComponent<Text>();
             text2.text = "" + hp;
+            if(hp <= 0)
+            {
+                //Labyrinthシーンに移動
+                FadeManager.Instance.LoadScene("GameOver");
+            }
         }
         if(other.gameObject.CompareTag("HpPlus"))
         {

@@ -9,7 +9,7 @@ public class Boss6 : MonoBehaviour
     public static float commonRand = 0; //様々なことに使う乱数
     public GameObject player;           //プレイヤーの位置を知るための変数
     Vector3 startPos;                   //ボスの初期位置
-    int hp = 70;                        //ボスのHP
+    int hp = 100;                        //ボスのHP
     public GameObject paperMan;         //攻撃パターン1 式紙のランダム突進・攻撃パターン4
     public GameObject paperManCircle;   //攻撃パターン2 式紙のかごめかごめ
     public GameObject paperSword;       //攻撃パターン3 式紙の剣
@@ -21,9 +21,23 @@ public class Boss6 : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerAttack"))
+        if (other.gameObject.CompareTag("PlayerBullet"))
         {
             hp--;
+            GetComponent<ParticleSystem>().Play();
+            if (hp == 0)
+            {
+                //BGMフェードアウト
+                AudioManager.Instance.FadeOutBGM();
+                //BGM再生
+                AudioManager.Instance.PlayBGM("Clear");
+                clearSceneGo.SetActive(true);
+                Destroy(gameObject);
+            }
+        }
+        if (other.gameObject.CompareTag("PlayerSword"))
+        {
+            hp -= 2;
             GetComponent<ParticleSystem>().Play();
             if (hp == 0)
             {
