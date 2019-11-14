@@ -8,9 +8,8 @@ public class Boss6 : MonoBehaviour
     System.Random rand = new System.Random(Environment.TickCount);
     public static float commonRand = 0; //様々なことに使う乱数
     public GameObject player;           //プレイヤーの位置を知るための変数
-    Vector3 startPos;                   //ボスの初期位置
     int hp = 100;                        //ボスのHP
-    public GameObject paperMan;         //攻撃パターン1 式紙のランダム突進・攻撃パターン4
+    public GameObject paperMan;         //攻撃パターン1 式紙のランダム突進
     public GameObject paperManCircle;   //攻撃パターン2 式紙のかごめかごめ
     public GameObject paperSword;       //攻撃パターン3 式紙の剣
     public GameObject homingBall;       //攻撃パターン4 追尾するボール
@@ -39,7 +38,7 @@ public class Boss6 : MonoBehaviour
         {
             hp -= 2;
             GetComponent<ParticleSystem>().Play();
-            if (hp == 0)
+            if (hp <= 0)
             {
                 //BGMフェードアウト
                 AudioManager.Instance.FadeOutBGM();

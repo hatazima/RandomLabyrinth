@@ -14,10 +14,13 @@ public class TitleGo : MonoBehaviour
 
     void Start()
     {
-        //BGMフェードアウト
-        AudioManager.Instance.FadeOutBGM();
-        //BGM再生
-        AudioManager.Instance.PlayBGM("GameOver");
+        if (PlayerData.playerDie)
+        {
+            //BGMフェードアウト
+            AudioManager.Instance.FadeOutBGM();
+            //BGM再生
+            AudioManager.Instance.PlayBGM("GameOver");
+        }
     }
     
     void Update()

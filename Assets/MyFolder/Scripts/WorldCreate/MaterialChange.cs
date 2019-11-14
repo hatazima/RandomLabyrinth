@@ -6,22 +6,19 @@ public class MaterialChange : MonoBehaviour
 {
     public GameObject floor;
     public GameObject[] wall;
-    public Material[] floorMaterial;
-    public Material[] wallMaterial;
+    Material[] floorMaterial;
+    Material[] wallMaterial;
 
     void Start()
     {
-        int type = WorldCreate.materialType;
+        floorMaterial = Resources.LoadAll<Material>("Floor");
+        wallMaterial = Resources.LoadAll<Material>("Wall");
+        int type = WorldCreate.type;
         floor.GetComponent<Renderer>().material = floorMaterial[type];
         
         foreach (GameObject obj in wall)
         {
             obj.GetComponent<Renderer>().material = wallMaterial[type];
         }
-    }
-    
-    void Update()
-    {
-        
     }
 }

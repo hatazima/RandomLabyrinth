@@ -22,9 +22,4 @@ public class HusumaClose : MonoBehaviour
     {
         AudioManager.Instance.PlaySE("Boss6");
     }
-    
-    void Update()
-    {
-        
-    }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class PlayerBullet : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class PlayerBullet : MonoBehaviour
     }
     void Start()
     {
+        AudioManager.Instance.PlaySE("PlayerBullet");
         //プレイヤーの姿勢を取得
-        Transform trans = GameObject.Find("ThirdPersonController").transform;
+        Transform trans = FindObjectOfType<ThirdPersonCharacter>().gameObject.transform;
         //プレイヤーの位置と弾の位置を合わせる
         transform.position = new Vector3(trans.position.x, trans.position.y + 1, trans.position.z);
         //プレイヤーの向きと玉の向きを合わせる

@@ -12,6 +12,7 @@ TagManager:
   - PortionPlus
   - PlayerBullet
   - PlayerSword
+  - TrueBoss
   layers:
   - Default
   - TransparentFX

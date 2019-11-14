@@ -7,19 +7,18 @@ public class Title : MonoBehaviour
 {
     private void Start()
     {
+        PlayerData.ResetValue();
         //BGM再生
         AudioManager.Instance.PlayBGM("Title");
     }
     
     public void StartButton()//Startボタンを押したときLabyrinthシーンに移動
     {
-        //BGMフェードアウト
-        AudioManager.Instance.FadeOutBGM();
-        //Labyrinthシーンに移動
+        //SelectStageシーンに移動
         FadeManager.Instance.LoadScene("SelectStage");
     }
     
-    public void PuitButton()//Puitボタンを押したときゲーム終了
+    public void QuitButton()//Puitボタンを押したときゲーム終了
     {
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

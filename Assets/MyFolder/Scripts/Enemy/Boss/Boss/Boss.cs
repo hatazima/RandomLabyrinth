@@ -13,6 +13,7 @@ public class Boss : MonoBehaviour
     public GameObject needle;      //攻撃パターン２ とげを召喚する
     public GameObject sword;       //攻撃パターン３ 剣？を召喚する
     public GameObject rollingPole; //攻撃パターン４ 転がる棒を召喚する
+    public GameObject clearSceneGo;     //ボスの撃破時にクリアシーンに移動するための光が出てくる
 
     int attackPattern = 0;         //攻撃をランダムに決める乱数
 
@@ -28,6 +29,7 @@ public class Boss : MonoBehaviour
                 AudioManager.Instance.FadeOutBGM();
                 //BGM再生
                 AudioManager.Instance.PlayBGM("Clear");
+                clearSceneGo.SetActive(true);
                 Destroy(gameObject);
             }
         }
@@ -35,12 +37,13 @@ public class Boss : MonoBehaviour
         {
             hp -= 2;
             GetComponent<ParticleSystem>().Play();
-            if (hp == 0)
+            if (hp <= 0)
             {
                 //BGMフェードアウト
                 AudioManager.Instance.FadeOutBGM();
                 //BGM再生
                 AudioManager.Instance.PlayBGM("Clear");
+                clearSceneGo.SetActive(true);
                 Destroy(gameObject);
             }
         }

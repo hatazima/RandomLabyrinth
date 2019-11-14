@@ -5,22 +5,22 @@ using UnityEngine.UI;
 
 public class SelectStage : MonoBehaviour
 {
-    public static int type { get; private set; } = 6;
-    public GameObject typeText;
-    string typeStr;
-    Text tText;
+    public static int type { get; private set; } = 6; //迷宮のタイプを決める変数
+    public GameObject typeText;                       //上記のテキストオブジェクト
+    Text tText;                                       //上記のテキスト
+    string typeStr;                                   //上記の文字列変数
 
-    public GameObject[] bossAppearanceText;
-    public static bool bossAppearance = true;
+    public static bool bossAppearance = false; //ボスを出現させるかを決める変数
+    public GameObject[] bossAppearanceText;   //上記のテキストオブジェクト
+    
+    public static int horizon { get; private set; } = 5;  //迷宮の横の長さを決める変数
+    public GameObject horizonText;                        //上記のテキストオブジェクト
+    Text hText;                                           //上記のテキスト
+    public static int vertical { get; private set; } = 5; //迷宮の縦の長さを決める変数
+    public GameObject verticalText;                       //上記のテキストオブジェクト
+    Text vText;                                           //上記のテキスト
 
-    public GameObject horizonText;
-    public static int horizon { get; private set; } = 4;
-    Text hText;
-    public GameObject verticalText;
-    public static int vertical { get; private set; } = 6;
-    Text vText;
-
-    public static int enemyCreateCount { get; private set; } = 6;
+    public static int enemyCreateCount { get; private set; } = 6; //敵の出現数
     
     public void TypeUpButton()//迷宮のタイプ値を上げるボタン
     {
@@ -64,14 +64,14 @@ public class SelectStage : MonoBehaviour
 
     public void HorizonUpButton()//迷宮の横の長さを上げるボタン
     {
-        if (horizon < 9)
+        if (horizon < 7)
         {
             horizon++;
             // テキストの表示を入れ替える
             hText = horizonText.GetComponent<Text>();
             hText.text = "横・" + horizon;
         }
-        else if (horizon == 9)
+        else if (horizon == 7)
         {
             horizon = 3;
             // テキストの表示を入れ替える
@@ -90,7 +90,7 @@ public class SelectStage : MonoBehaviour
         }
         else if (horizon == 3)
         {
-            horizon = 9;
+            horizon = 7;
             // テキストの表示を入れ替える
             hText = horizonText.GetComponent<Text>();
             hText.text = "横・" + horizon;
@@ -98,14 +98,14 @@ public class SelectStage : MonoBehaviour
     }
     public void VerticalUpButton()//迷宮の縦の長さを上げるボタン
     {
-        if (vertical < 9)
+        if (vertical < 7)
         {
             vertical++;
             // テキストの表示を入れ替える
             vText = verticalText.GetComponent<Text>();
             vText.text = "縦・" + vertical;
         }
-        else if (vertical == 9)
+        else if (vertical == 7)
         {
             vertical = 3;
             // テキストの表示を入れ替える
@@ -124,7 +124,7 @@ public class SelectStage : MonoBehaviour
         }
         else if (vertical == 3)
         {
-            vertical = 9;
+            vertical = 7;
             // テキストの表示を入れ替える
             vText = verticalText.GetComponent<Text>();
             vText.text = "縦・" + vertical;
@@ -133,18 +133,19 @@ public class SelectStage : MonoBehaviour
 
     public void LabyrinthGo()
     {
+        //BGMフェードアウト
+        AudioManager.Instance.FadeOutBGM();
+        //Labyrinthシーンに移動
         FadeManager.Instance.LoadScene("Labyrinth");
     }
 
     void Start()
     {
-        bossAppearanceText[0].GetComponent<Image>().color = new Color(0, 0, 0);
-        bossAppearanceText[1].GetComponent<Image>().color = new Color(1, 1, 1);
+        //TrueBossを出現させなくする
+        NoButton();
 
         // 初期テキストの表示
-        typeStr = "ランダム";
-        tText = typeText.GetComponent<Text>();
-        tText.text = typeStr;
+        TypeChange();
         // 初期テキストの表示
         hText = horizonText.GetComponent<Text>();
         hText.text = "横・" + horizon;
@@ -162,27 +163,13 @@ public class SelectStage : MonoBehaviour
     {
         switch (type)
         {
-            case 0:
-                typeStr = "通常";
-                break;
-            case 1:
-                typeStr = "木";
-                break;
-            case 2:
-                typeStr = "石";
-                break;
-            case 3:
-                typeStr = "砂漠";
-                break;
-            case 4:
-                typeStr = "海";
-                break;
-            case 5:
-                typeStr = "和風";
-                break;
-            case 6:
-                typeStr = "ランダム";
-                break;
+            case 0: typeStr = "通常"; break;
+            case 1: typeStr = "木"; break;
+            case 2: typeStr = "石"; break;
+            case 3: typeStr = "砂漠"; break;
+            case 4: typeStr = "海"; break;
+            case 5: typeStr = "和風"; break;
+            case 6: typeStr = "ランダム"; break;
         }
         // テキストの表示を入れ替える
         tText = typeText.GetComponent<Text>();

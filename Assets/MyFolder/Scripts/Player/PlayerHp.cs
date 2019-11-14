@@ -8,8 +8,8 @@ public class PlayerHp : MonoBehaviour
     public Slider hpBar;
     public GameObject maxHpObject;
     public GameObject hpObject;
-    float maxHp = 100;
-    float hp = 100;
+    float maxHp;
+    float hp;
     float damage;
 
     private void OnTriggerEnter(Collider other)
@@ -21,16 +21,20 @@ public class PlayerHp : MonoBehaviour
             hp -= 10;
             Text text2 = hpObject.GetComponent<Text>();
             text2.text = "" + hp;
+            PlayerData.playerHp = hp;
             if(hp <= 0)
             {
-                //Labyrinthシーンに移動
+                //GameOverシーンに移動
+                PlayerData.playerDie = true;
                 FadeManager.Instance.LoadScene("GameOver");
             }
         }
         if(other.gameObject.CompareTag("HpPlus"))
         {
             hpBar.value = 1;
+            PlayerData.playerMaxHp = 200;
             maxHp = 200;
+            PlayerData.playerHp = 200;
             hp = 200;
             hpBar = hpBar.GetComponent<Slider>();
             damage = hpBar.value / maxHp;
@@ -49,6 +53,8 @@ public class PlayerHp : MonoBehaviour
 
     void Start()
     {
+        maxHp = PlayerData.playerMaxHp;
+        hp = PlayerData.playerHp;
         hpBar = hpBar.GetComponent<Slider>();
         damage = hpBar.value / maxHp;
 

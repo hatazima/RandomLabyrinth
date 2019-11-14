@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    public Vector2Int roomPosition { get; set; }
+    WorldCreate wc;
+
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("BlockBreak"))
         {
+            wc.SetMapType(roomPosition, MapType.empty);
             Destroy(gameObject);
         }
     }
-    void Start()
+
+    private void Start()
     {
-        
-    }
-    
-    void Update()
-    {
-        
+        wc = FindObjectOfType<WorldCreate>();
     }
 }

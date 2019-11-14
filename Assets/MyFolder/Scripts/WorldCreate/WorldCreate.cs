@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 
 public enum MapType
 {
@@ -14,29 +15,51 @@ public enum MapType
 
 public class WorldCreate : MonoBehaviour
 {
-    public MapType[,] roomArray { get; set; }
+    public MapType[,] _roomArray { get; set; }
     public List<EnemyOrb> enemyes { get; set; } = new List<EnemyOrb>();
     System.Random rand = new System.Random(Environment.TickCount);
-    public GameObject smallRoom;
-    public GameObject outerWall;
-    public GameObject block;
-    public GameObject enemy;
-    public GameObject[] others;
+    public GameObject smallRoom; //迷宮の1マス
+    public GameObject outerWall; //外壁
+    public GameObject block;     //内壁
+    public GameObject enemy;     //敵
+    public GameObject[] others;  //その他
     
-    int horizon, vertical; //迷宮作成時の横(horizon)と縦(vertical)の長さ
-    int enemyCount;
     int randomOthersX, randomOthersZ;
+    int enemyCount;                     //敵の数
+    int horizon, vertical;              //迷宮作成時の横(horizon)と縦(vertical)の長さ
     int randomCreate = 0;               //敵・壁などの生成時に使う乱数
-    public static int materialType = 0; //壁と床の色を決める乱数
+    public static int type = 0;         //壁と床の色を決める乱数
 
     void Start()
     {
-        horizon = SelectStage.horizon;
-        vertical = SelectStage.vertical;
-        enemyCount = SelectStage.enemyCreateCount;
-        if (SelectStage.type == 6) materialType = rand.Next(0, 6);
-        else materialType = SelectStage.type;
-        AudioManager.Instance.PlayBGM("Main1");
+        horizon = SelectStage.horizon;             //横の長さ
+        vertical = SelectStage.vertical;           //縦の長さ
+        enemyCount = SelectStage.enemyCreateCount; //敵の数
+        //迷宮タイプの決定
+        if (SelectStage.type == 6) type = rand.Next(0, 6);
+        else type = SelectStage.type;
+        //BGMの決定
+        switch (type)
+        {
+            case 0:
+                AudioManager.Instance.PlayBGM("Main1");
+                break;
+            case 1:
+                AudioManager.Instance.PlayBGM("Main2");
+                break;
+            case 2:
+                AudioManager.Instance.PlayBGM("Main3");
+                break;
+            case 3:
+                AudioManager.Instance.PlayBGM("Main4");
+                break;
+            case 4:
+                AudioManager.Instance.PlayBGM("Main5");
+                break;
+            case 5:
+                AudioManager.Instance.PlayBGM("Main6");
+                break;
+        }
         /* ×外×外×外×
          * 外へ壁へ壁へ外
          * ×壁×壁×壁×
@@ -45,47 +68,48 @@ public class WorldCreate : MonoBehaviour
          * 外へ壁へ壁へ外
          * ×外×外×外×
          * 部屋の大きさ＊2+1*/
-        roomArray = new MapType[vertical * 2 + 1, horizon * 2 + 1];
+        _roomArray = new MapType[horizon * 2 + 1, vertical * 2 + 1];
 
         //部屋の生成
-        for (int i = 0; i < vertical; i++)
+        for (int y = 0; y < vertical; y++)
         {
-            for (int j = 0; j < horizon; j++)
+            for (int x = 0; x < horizon; x++)
             {
-                GameObject floor = Instantiate(smallRoom, new Vector3(j * 10, 0, i * 10), Quaternion.identity);
-                roomArray[i * 2 + 1, j * 2 + 1] = MapType.room;
+                GameObject floor = Instantiate(smallRoom, new Vector3(x * 10, 0, y * 10), Quaternion.identity);
+                SetMapType(x * 2 + 1, y * 2 + 1,MapType.room);
             }
         }
+
         //外壁の生成
-        for (int i = 0; i < roomArray.GetLength(0); i++)
+        for (int y = 0; y < _roomArray.GetLength(1); y++)
         {
-            for (int j = 0; j < roomArray.GetLength(1) ; j++)
+            for (int x = 0; x < _roomArray.GetLength(0) ; x++)
             {
                 //外壁を生成しないところをスキップする
-                if((i%2==0 && j%2==0) || (i % 2 == 1 && j % 2 == 1))
+                if((y%2==0 && x%2==0) || (y % 2 == 1 && x % 2 == 1))
                 {
                     continue;
                 }
-                if(!(i == 0 || i == roomArray.GetLength(0)-1 || j == 0 || j == roomArray.GetLength(1)-1))
+                if(!(y == 0 || y == _roomArray.GetLength(1)-1 || x == 0 || x == _roomArray.GetLength(0)-1))
                 {
                     continue;
                 }
                 //外壁を生み出す
-                Instantiate(outerWall, new Vector3(j * 5 - 5, 1.25f, i * 5 - 5), Quaternion.identity);
-                roomArray[i, j] = MapType.wall;
+                Instantiate(outerWall, new Vector3(x * 5 - 5, 1.25f, y * 5 - 5), Quaternion.identity);
+                SetMapType(x, y, MapType.wall); 
             }
         }
         //内壁の生成
-        for (int i = 0; i < roomArray.GetLength(0); i++)
+        for (int y = 0; y < _roomArray.GetLength(1); y++)
         {
-            for (int j = 0; j < roomArray.GetLength(1) ; j++)
+            for (int x = 0; x < _roomArray.GetLength(0) ; x++)
             {
                 //内壁を生成しないところをスキップする
-                if((i%2==0 && j%2==0) || (i % 2 == 1 && j % 2 == 1))
+                if((y%2==0 && x%2==0) || (y % 2 == 1 && x % 2 == 1))
                 {
                     continue;
                 }
-                if((i == 0 || i == roomArray.GetLength(0)-1) || (j == 0 || j == roomArray.GetLength(1)-1))
+                if((y == 0 || y == _roomArray.GetLength(1)-1) || (x == 0 || x == _roomArray.GetLength(0)-1))
                 {
                     continue;
                 }
@@ -93,8 +117,12 @@ public class WorldCreate : MonoBehaviour
                 randomCreate = rand.Next(0, 3);
                 if (randomCreate != 1)
                 {
-                    Instantiate(block, new Vector3(j * 5 - 5, 1.25f, i * 5 - 5), Quaternion.identity);
-                    roomArray[i, j] = MapType.wall;
+                    Block _block = Instantiate(
+                        block,
+                        new Vector3(x * 5 - 5, 1.25f, y * 5 - 5),
+                        Quaternion.identity).GetComponent<Block>();
+                    _block.roomPosition = new Vector2Int(x, y);
+                    SetMapType(x, y, MapType.wall);
                 }
             }
         }
@@ -103,55 +131,22 @@ public class WorldCreate : MonoBehaviour
         {
             EnemyOrb spawnEnemy = Instantiate(
                 enemy, 
-                new Vector3((room.y - 1) / 2 * 10 , 1f, (room.x - 1) / 2 * 10), 
+                new Vector3((room.x - 1) / 2 * 10 , 1f, (room.y - 1) / 2 * 10), 
                 Quaternion.identity
                 ).GetComponent<EnemyOrb>();
             //生成と同時に部屋の位置座標を入れる
             spawnEnemy.currentPosition = room;
             spawnEnemy.wc = this;
             enemyes.Add(spawnEnemy);
-            roomArray[room.x, room.y] = MapType.enemyRoom;
+            SetMapType(room, MapType.enemyRoom);
         }
 
+        //その他をランダムに生み出す
         for(int i = 0; i < others.Length; i++)
         {
             randomOthersX = rand.Next(0, horizon);
             randomOthersZ = rand.Next(0, vertical);
             Instantiate(others[i], new Vector3(randomOthersX * 10, 0, randomOthersZ * 10), Quaternion.identity);
-        }
-
-    }
-
-    private void Update()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            for(int i = 0; i < roomArray.GetLength(0); i++)
-            {
-                string s = "";
-                for(int j = 0; j < roomArray.GetLength(1); j++)
-                {
-                    switch(roomArray[i,j])
-                    {
-                        case MapType.wall:
-                            s += "か";
-                            break;
-
-                        case MapType.room:
-                            s += "へ";
-                            break;
-
-                        case MapType.empty:
-                            s += "〇";
-                            break;
-
-                        case MapType.enemyRoom:
-                            s += "敵";
-                            break;
-                    }
-                }
-                Debug.Log(s);
-            }
         }
     }
 
@@ -163,14 +158,14 @@ public class WorldCreate : MonoBehaviour
     {
         //ルームの座標一覧
         List<Vector2Int> roomIndex = new List<Vector2Int>();
-        for (int i = 0; i < roomArray.GetLength(0); i++)
+        for (int y = 0; y < _roomArray.GetLength(1); y++)
         {
-            for (int j = 0; j < roomArray.GetLength(1); j++)
+            for (int x = 0; x < _roomArray.GetLength(0); x++)
             {
                 //部屋の位置を取得
-                if (roomArray[i,j] == MapType.room)
+                if (GetMapType(x, y) == MapType.room)
                 {
-                    roomIndex.Add(new Vector2Int(i, j));
+                    roomIndex.Add(new Vector2Int(x, y));
                 }
             }
         }
@@ -191,8 +186,8 @@ public class WorldCreate : MonoBehaviour
         {
             Vector2Int candidatePos = currentPosition + diff * 2;
             Vector2Int tempPos = currentPosition + diff;
-            if (roomArray[tempPos.x, tempPos.y] == MapType.empty && 
-                roomArray[candidatePos.x, candidatePos.y] == MapType.room)
+            if (GetMapType(tempPos) == MapType.empty && 
+                GetMapType(candidatePos) == MapType.room)
             {
                 movableRoomList.Add(candidatePos);
             }
@@ -203,5 +198,25 @@ public class WorldCreate : MonoBehaviour
     public Vector3 GetRoomPosition(Vector2Int roomIndex)
     {
         return new Vector3((roomIndex.x - 1) / 2 * 10, 1f, (roomIndex.y - 1) / 2 * 10);
+    }
+
+    public void SetMapType(int x,int y, MapType type)
+    {
+        _roomArray[x, y] = type;
+    }
+
+    public void SetMapType(Vector2Int pos,MapType type)
+    {
+        _roomArray[pos.x, pos.y] = type;
+    }
+
+    public MapType GetMapType(int x,int y)
+    {
+        return _roomArray[x, y];
+    }
+
+    public MapType GetMapType(Vector2Int pos)
+    {
+        return _roomArray[pos.x, pos.y];
     }
 }
